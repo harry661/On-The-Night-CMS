@@ -1,17 +1,29 @@
-FROM php:8.2-fpm
+FROM php:8.2-cli
 
-# Install dependencies
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
     curl \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
+    libzip-dev \
+    libicu-dev \
     zip \
-    unzip
+    unzip \
+    sqlite3 \
+    libsqlite3-dev
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+RUN docker-php-ext-configure zip --with-libzip \
+    && docker-php-ext-install \
+        pdo \
+        pdo_sqlite \
+        mbstring \
+        zip \
+        intl \
+        bcmath \
+        exif
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -19,12 +31,14 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy application
-COPY . /var/www/html
-COPY --chown=www-data:www-data . /var/www/html
+# Copy composer files first for better caching
+COPY composer.json composer.lock* ./
 
-# Install dependencies
-RUN composer install --no-dev --optimize-autoloader --no-scripts
+# Install dependencies with platform requirements ignored
+RUN composer install --no-dev --optimize-autoloader --no-scripts --ignore-platform-reqs
+
+# Copy rest of application
+COPY . /var/www/html
 
 # Create sqlite database
 RUN touch /var/www/html/database.sqlite
