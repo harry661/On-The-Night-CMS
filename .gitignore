@@ -19,4 +19,5 @@ yarn-error.log
 *.zip
 ngrok*
 Procfile
-database/database.sqlite*
+database/database.sqlite
+!/database/database.sqlite.backup
