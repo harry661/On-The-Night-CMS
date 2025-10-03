@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: onthenight-cms
+    env: php
+    repo: https://github.com/harry661/On-The-Night-CMS
+    buildCommand: "composer install --no-dev --optimize-autoloader && php artisan migrate --force && php artisan config:cache && php artisan route:cache"
+    startCommand: "php artisan serve --host=0.0.0.0 --port=$PORT"
+    plan: free
+    region: oregon
+    healthCheckPath: /admin
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_URL
+        value: https://onthenight-cms.onrender.com
+      - key: DB_CONNECTION
+        value: sqlite
+      - key: DB_DATABASE
+        value: /tmp/database.sqlite
+      - key: LOG_LEVEL
+        value: error
