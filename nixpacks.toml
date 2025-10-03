@@ -1,10 +1,13 @@
-providers = ["php", "common"]
+providers = ["php", "postgresql", "common"]
 
 [providers.common]
 install_commands = ["composer install --no-dev --optimize-autoloader"]
 
 [providers.php]
 php_version = "8.2"
+
+[providers.postgresql]
+version = "15"
 
 [build]
 commands = ["php artisan config:cache", "php artisan route:cache", "php artisan view:cache", "php artisan migrate --force"]

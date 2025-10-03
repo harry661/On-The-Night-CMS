@@ -20,4 +20,4 @@ yarn-error.log
 ngrok*
 # Procfile needed for Railway
 database/database.sqlite
-!/database/database.sqlite.backup
+!/database/database.sqlite.backupstorage/framework/sessions/
