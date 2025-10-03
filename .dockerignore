@@ -1,0 +1,13 @@
+node_modules
+.env
+.git
+.gitignore
+README.md
+Dockerfile
+.dockerignore
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/testing/*
+storage/logs/*
+vendor
+composer.lock

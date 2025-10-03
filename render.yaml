@@ -3,11 +3,12 @@ services:
     name: onthenight-cms
     env: php
     repo: https://github.com/harry661/On-The-Night-CMS
-    buildCommand: "composer install --no-dev --optimize-autoloader && php artisan migrate --force && php artisan config:cache && php artisan route:cache"
+    phpVersion: 8.2
+    buildCommand: "composer install --no-dev --optimize-autoloader"
     startCommand: "php artisan serve --host=0.0.0.0 --port=$PORT"
     plan: free
     region: oregon
-    healthCheckPath: /admin
+    healthCheckPath: /
     envVars:
       - key: APP_ENV
         value: production
