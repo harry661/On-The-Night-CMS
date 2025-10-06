@@ -11,6 +11,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
@@ -273,6 +274,13 @@ class VenueResource extends Resource
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
+                
+                ImageColumn::make('image')
+                    ->label('Image')
+                    ->disk('public')
+                    ->size(60)
+                    ->square()
+                    ->defaultImageUrl('/images/venue-placeholder.jpg'),
                 
                 TextColumn::make('venueType.name')
                     ->label('Type')
