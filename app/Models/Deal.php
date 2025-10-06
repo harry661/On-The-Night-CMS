@@ -64,7 +64,7 @@ class Deal extends Model implements HasMedia
     /**
      * Register media conversions for optimized images
      */
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('thumb')
             ->width(300)

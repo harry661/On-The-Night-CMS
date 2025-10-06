@@ -221,6 +221,7 @@ class VenueResource extends Resource
                             ->label('Venue Image')
                             ->image()
                             ->directory('venues')
+                            ->visibility('public')
                             ->imageEditor()
                             ->imageEditorAspectRatios([
                                 '16:9',  // Wide shots of venue space

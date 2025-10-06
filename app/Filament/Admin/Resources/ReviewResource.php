@@ -118,7 +118,7 @@ class ReviewResource extends Resource
                 Section::make('Review Images')
                     ->description('Photos submitted with this review')
                     ->schema([
-                        FileUpload::make('images')
+                        FileUpload::make('review_images')
                             ->label('Review Images')
                             ->image()
                             ->multiple()

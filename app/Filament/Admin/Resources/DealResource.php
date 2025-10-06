@@ -120,7 +120,7 @@ class DealResource extends Resource
                 Section::make('Deal Image')
                     ->description('Visual that showcases your offer')
                     ->schema([
-                        FileUpload::make('images')
+                        FileUpload::make('deal_images')
                             ->label('Deal Image')
                             ->image()
                             ->directory('deals')

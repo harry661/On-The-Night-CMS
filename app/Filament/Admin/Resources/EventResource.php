@@ -158,7 +158,7 @@ class EventResource extends Resource
                 Section::make('Event Image')
                     ->description('Promotional visuals for this event')
                     ->schema([
-                        FileUpload::make('images')
+                        FileUpload::make('event_images')
                             ->label('Event Image')
                             ->image()
                             ->directory('events')
