@@ -377,11 +377,7 @@ class VenueResource extends Resource
                             ->imageResizeTargetWidth('1920')
                             ->imageResizeTargetHeight('1080')
                             ->visibility('public')
-                            ->required()
-                            ->defaultImageUrl('/images/venue-placeholder.jpg')
-                            ->getUploadedFileUrlUsing(function ($file) {
-                                return url('/cors-image/' . $file);
-                            }),
+                            ->required(),
                     ])
                     ->action(function (Venue $record, array $data): void {
                         $record->update($data);
