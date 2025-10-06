@@ -11,7 +11,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\FileUpload as TableFileUpload;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
@@ -212,28 +212,6 @@ class VenueResource extends Resource
                     ->icon('heroicon-o-musical-note')
                     ->collapsible()
                     ->collapsed(false),
-                
-                // VENUE IMAGES (Marketing Essential)
-                Section::make('Venue Images')
-                    ->description('High-quality photo that showcases your venue\'s vibe')
-                    ->schema([
-                        FileUpload::make('image')
-                            ->label('Venue Image')
-                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                            ->maxSize(20480) // 20MB
-                            ->imageEditor(false)
-                            ->imageCropAspectRatio('16:9')
-                            ->imageResizeTargetWidth('1920')
-                            ->imageResizeTargetHeight('1080')
-                            ->disk('public')
-                            ->directory('venues')
-                            ->visibility('public')
-                            ->columnSpanFull()
-                            ->helperText('Upload the main photo that represents your venue'),
-                    ])
-                    ->icon('heroicon-o-camera')
-                    ->collapsed(true),
-                
                 // AMENITIES & FEATURES (Important Differentiators)
                 Section::make('Amenities & Features')
                     ->description('What makes your venue stand out from the competition')
@@ -275,11 +253,20 @@ class VenueResource extends Resource
                     ->searchable()
                     ->sortable(),
                 
-                ImageColumn::make('image')
+                TableFileUpload::make('image')
                     ->label('Image')
                     ->disk('public')
-                    ->size(60)
-                    ->square()
+                    ->directory('venues')
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                    ->maxSize(20480) // 20MB
+                    ->imageEditor(false)
+                    ->imageCropAspectRatio('16:9')
+                    ->imageResizeTargetWidth('1920')
+                    ->imageResizeTargetHeight('1080')
+                    ->visibility('public')
+                    ->openable()
+                    ->downloadable()
+                    ->previewable(true)
                     ->defaultImageUrl('/images/venue-placeholder.jpg'),
                 
                 TextColumn::make('venueType.name')
