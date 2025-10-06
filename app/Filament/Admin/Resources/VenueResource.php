@@ -222,12 +222,8 @@ class VenueResource extends Resource
                             ->image()
                             ->directory('venues')
                             ->visibility('public')
-                            ->imageEditor()
-                            ->imageEditorAspectRatios([
-                                '16:9',  // Wide shots of venue space
-                                '4:3',   // Standard venue views  
-                                '1:1',   // Square social media ready
-                            ])
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                            ->maxSize(10240) // 10MB
                             ->columnSpanFull()
                             ->helperText('Upload the main photo that represents your venue'),
                     ])
