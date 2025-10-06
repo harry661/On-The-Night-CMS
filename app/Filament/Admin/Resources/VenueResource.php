@@ -24,7 +24,6 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Illuminate\Support\Facades\Auth;
@@ -273,12 +272,6 @@ class VenueResource extends Resource
                     ->searchable()
                     ->sortable(),
                 
-                SpatieMediaLibraryImageColumn::make('venue_images')
-                    ->label('Image')
-                    ->collection('venue_images')
-                    ->size(60)
-                    ->circular(),
-                
                 TextColumn::make('venueType.name')
                     ->label('Type')
                     ->searchable()
@@ -338,7 +331,7 @@ class VenueResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-                ->filters([
+            ->filters([
                     SelectFilter::make('location')
                         ->relationship('location', 'name')
                         ->searchable()
