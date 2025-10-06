@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DealResource;
+use App\Http\Traits\ApiResponseTrait;
 use App\Models\Deal;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 class DealController extends Controller
 {
+    use ApiResponseTrait;
     /**
      * Display a listing of current deals.
      */
@@ -88,7 +90,6 @@ class DealController extends Controller
                     ->active()
                     ->where('start_date', '<=', now())
                     ->where('end_date', '>=', now())
-                    ->where('featured', true)
                     ->orderBy('end_date', 'asc')
                     ->limit($limit)
                     ->get();

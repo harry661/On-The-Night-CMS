@@ -252,4 +252,58 @@ class VenueController extends Controller
             ]
         ]);
     }
+
+    /**
+     * Get sponsored venues
+     */
+    public function sponsored(Request $request): JsonResponse
+    {
+        $limit = $request->input('limit', 10);
+        
+        $venues = Venue::with(['drinkTypes', 'musicGenres', 'location', 'reviews' => function($query) {
+                $query->where('is_approved', true);
+            }])
+            ->where('is_active', true)
+            ->where('status', 'sponsored')
+            ->orderBy('created_at', 'desc')
+            ->limit($limit)
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Sponsored venues retrieved successfully',
+            'data' => VenueResource::collection($venues),
+            'meta' => [
+                'count' => $venues->count(),
+                'status' => 'sponsored',
+            ]
+        ]);
+    }
+
+    /**
+     * Get new venues
+     */
+    public function new(Request $request): JsonResponse
+    {
+        $limit = $request->input('limit', 10);
+        
+        $venues = Venue::with(['drinkTypes', 'musicGenres', 'location', 'reviews' => function($query) {
+                $query->where('is_approved', true);
+            }])
+            ->where('is_active', true)
+            ->where('status', 'new')
+            ->orderBy('created_at', 'desc')
+            ->limit($limit)
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'New venues retrieved successfully',
+            'data' => VenueResource::collection($venues),
+            'meta' => [
+                'count' => $venues->count(),
+                'status' => 'new',
+            ]
+        ]);
+    }
 }

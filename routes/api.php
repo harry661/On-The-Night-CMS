@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\LocationController;
 use App\Http\Controllers\Api\DrinkTypeController;
 use App\Http\Controllers\Api\MusicGenreController;
+use App\Http\Controllers\Api\AppDataController;
 use App\Http\Controllers\AuthController;
 
 /*
@@ -32,9 +33,14 @@ Route::prefix('v1')->group(function () {
 // Public routes (no authentication required)
 Route::prefix('v1')->group(function () {
     
+    // All app data in one call (perfect for Figma Make)
+    Route::get('/data', [AppDataController::class, 'allData']);
+    
     // Venues
     Route::get('/venues', [VenueController::class, 'index']);
     Route::get('/venues/featured', [VenueController::class, 'featured']);
+    Route::get('/venues/sponsored', [VenueController::class, 'sponsored']);
+    Route::get('/venues/new', [VenueController::class, 'new']);
     Route::get('/venues/nearby', [VenueController::class, 'nearby']);
     Route::get('/venues/by-music-genre/{genre}', [VenueController::class, 'byMusicGenre']);
     Route::get('/venues/by-drink-type/{drinkType}', [VenueController::class, 'byDrinkType']);
