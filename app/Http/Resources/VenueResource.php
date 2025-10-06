@@ -36,7 +36,6 @@ class VenueResource extends JsonResource
             'venue_type' => [
                 'id' => $this->venueType?->id,
                 'name' => $this->venueType?->name,
-                'slug' => $this->venueType?->slug,
                 'icon' => $this->venueType?->icon,
                 'color' => $this->venueType?->color,
             ],

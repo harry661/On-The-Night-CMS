@@ -12,7 +12,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Str;
 
 class VenueTypeResource extends Resource
 {
@@ -32,31 +31,12 @@ class VenueTypeResource extends Resource
             ->schema([
                 Forms\Components\Section::make('Venue Type Details')
                     ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255)
+                            ->prefixIcon('heroicon-o-tag'),
+                        
                         Forms\Components\Grid::make(2)
-                            ->schema([
-                                Forms\Components\TextInput::make('name')
-                                    ->required()
-                                    ->maxLength(255)
-                                    ->live(onBlur: true)
-                                    ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
-                                        if ($operation !== 'create') {
-                                            return;
-                                        }
-                                        $set('slug', Str::slug($state));
-                                    }),
-                                
-                                Forms\Components\TextInput::make('slug')
-                                    ->required()
-                                    ->maxLength(255)
-                                    ->unique(VenueType::class, 'slug', ignoreRecord: true)
-                                    ->helperText('URL-friendly version of the name'),
-                            ]),
-                        
-                        Forms\Components\Textarea::make('description')
-                            ->rows(3)
-                            ->helperText('Brief description of this venue type'),
-                        
-                        Forms\Components\Grid::make(3)
                             ->schema([
                                 Forms\Components\TextInput::make('icon')
                                     ->maxLength(255)
@@ -65,11 +45,6 @@ class VenueTypeResource extends Resource
                                 Forms\Components\TextInput::make('color')
                                     ->maxLength(255)
                                     ->helperText('Hex color code (e.g., "#FF5733")'),
-                                
-                                Forms\Components\TextInput::make('sort_order')
-                                    ->numeric()
-                                    ->default(0)
-                                    ->helperText('Order for display (lower numbers first)'),
                             ]),
                         
                         Forms\Components\Toggle::make('is_active')
@@ -87,21 +62,6 @@ class VenueTypeResource extends Resource
                     ->searchable()
                     ->sortable(),
                 
-                Tables\Columns\TextColumn::make('slug')
-                    ->searchable()
-                    ->sortable()
-                    ->copyable(),
-                
-                Tables\Columns\TextColumn::make('description')
-                    ->limit(50)
-                    ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
-                        $state = $column->getState();
-                        if (strlen($state) <= 50) {
-                            return null;
-                        }
-                        return $state;
-                    }),
-                
                 Tables\Columns\TextColumn::make('venues_count')
                     ->counts('venues')
                     ->label('Venues')
@@ -109,9 +69,6 @@ class VenueTypeResource extends Resource
                 
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean()
-                    ->sortable(),
-                
-                Tables\Columns\TextColumn::make('sort_order')
                     ->sortable(),
                 
                 Tables\Columns\TextColumn::make('created_at')
@@ -137,7 +94,7 @@ class VenueTypeResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('sort_order');
+            ->defaultSort('name');
     }
 
     public static function getRelations(): array
