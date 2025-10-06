@@ -11,7 +11,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Tables\Columns\FileUpload as TableFileUpload;
+use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
@@ -253,21 +253,14 @@ class VenueResource extends Resource
                     ->searchable()
                     ->sortable(),
                 
-                TableFileUpload::make('image')
+                ImageColumn::make('image')
                     ->label('Image')
                     ->disk('public')
-                    ->directory('venues')
-                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                    ->maxSize(20480) // 20MB
-                    ->imageEditor(false)
-                    ->imageCropAspectRatio('16:9')
-                    ->imageResizeTargetWidth('1920')
-                    ->imageResizeTargetHeight('1080')
-                    ->visibility('public')
+                    ->size(60)
+                    ->square()
+                    ->defaultImageUrl('/images/venue-placeholder.jpg')
                     ->openable()
-                    ->downloadable()
-                    ->previewable(true)
-                    ->defaultImageUrl('/images/venue-placeholder.jpg'),
+                    ->downloadable(),
                 
                 TextColumn::make('venueType.name')
                     ->label('Type')
@@ -359,6 +352,27 @@ class VenueResource extends Resource
                 Tables\Actions\ViewAction::make()
                     ->successNotificationTitle(''),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('edit_image')
+                    ->label('Edit Image')
+                    ->icon('heroicon-o-camera')
+                    ->form([
+                        FileUpload::make('image')
+                            ->label('Venue Image')
+                            ->disk('public')
+                            ->directory('venues')
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                            ->maxSize(20480) // 20MB
+                            ->imageEditor(false)
+                            ->imageCropAspectRatio('16:9')
+                            ->imageResizeTargetWidth('1920')
+                            ->imageResizeTargetHeight('1080')
+                            ->visibility('public')
+                            ->required(),
+                    ])
+                    ->action(function (Venue $record, array $data): void {
+                        $record->update($data);
+                    })
+                    ->modalWidth('lg'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
