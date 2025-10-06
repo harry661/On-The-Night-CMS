@@ -94,14 +94,8 @@ class VenueResource extends JsonResource
     {
         $imageUrl = $this->getImageUrl();
         
-        return [
-            [
-                'url' => $imageUrl,
-                'thumbnail' => $imageUrl,
-                'preview' => $imageUrl,
-                'collection' => 'venue_image',
-            ]
-        ];
+        // Return just the single image URL as a simple array
+        return [$imageUrl];
     }
 
     /**
