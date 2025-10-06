@@ -33,6 +33,13 @@ class VenueResource extends JsonResource
             'amenities' => $this->amenities,
             'is_active' => $this->is_active,
             'status' => $this->status,
+            'venue_type' => [
+                'id' => $this->venueType?->id,
+                'name' => $this->venueType?->name,
+                'slug' => $this->venueType?->slug,
+                'icon' => $this->venueType?->icon,
+                'color' => $this->venueType?->color,
+            ],
             'images' => $this->getAllMediaUrls(),
             'location' => new LocationResource($this->whenLoaded('location')),
             'drink_types' => DrinkTypeResource::collection($this->whenLoaded('drinkTypes')),

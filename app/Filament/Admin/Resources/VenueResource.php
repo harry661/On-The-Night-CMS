@@ -72,18 +72,30 @@ class VenueResource extends Resource
                             ->columnSpanFull()
                             ->helperText('Describe your venue\'s atmosphere, music, crowd, and unique offerings'),
                         
-                            Select::make('status')
-                                ->label('Marketing Status')
-                                ->options([
-                                    'none' => 'No Special Status',
-                                    'featured' => 'Featured Venue',
-                                    'sponsored' => 'Sponsored Promotion',
-                                    'new' => 'New Venue',
-                                ])
-                                ->default('none')
-                                ->prefixIcon('heroicon-o-star'),
-
-                            Toggle::make('is_active')
+                        Grid::make(2)
+                            ->schema([
+                                Select::make('venue_type_id')
+                                    ->label('Venue Type')
+                                    ->relationship('venueType', 'name')
+                                    ->searchable()
+                                    ->preload()
+                                    ->required()
+                                    ->prefixIcon('heroicon-o-tag')
+                                    ->helperText('Choose the primary category for this venue'),
+                                
+                                Select::make('status')
+                                    ->label('Marketing Status')
+                                    ->options([
+                                        'none' => 'No Special Status',
+                                        'featured' => 'Featured Venue',
+                                        'sponsored' => 'Sponsored Promotion',
+                                        'new' => 'New Venue',
+                                    ])
+                                    ->default('none')
+                                    ->prefixIcon('heroicon-o-star'),
+                            ]),
+                        
+                        Toggle::make('is_active')
                                 ->label('Venue is Active')
                                 ->helperText('Toggle off to hide from public')
                                 ->default(true)
@@ -263,10 +275,23 @@ class VenueResource extends Resource
                     ->searchable()
                     ->sortable(),
                 
-                    TextColumn::make('location.name')
-                        ->label('Location')
-                        ->searchable()
-                        ->sortable(),
+                TextColumn::make('venueType.name')
+                    ->label('Type')
+                    ->searchable()
+                    ->sortable()
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'Bar' => 'purple',
+                        'Food' => 'orange', 
+                        'Stay' => 'green',
+                        'Leisure' => 'red',
+                        default => 'gray',
+                    }),
+                
+                TextColumn::make('location.name')
+                    ->label('Location')
+                    ->searchable()
+                    ->sortable(),
 
                     TextColumn::make('location.city')
                         ->label('City')

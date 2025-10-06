@@ -34,6 +34,7 @@ class Venue extends Model implements HasMedia
             'status',
             'user_id',
             'location_id',
+            'venue_type_id',
         ];
 
     protected $casts = [
@@ -174,6 +175,14 @@ class Venue extends Model implements HasMedia
     public function location()
     {
         return $this->belongsTo(Location::class);
+    }
+
+    /**
+     * Get the venue type this venue belongs to
+     */
+    public function venueType(): BelongsTo
+    {
+        return $this->belongsTo(VenueType::class);
     }
 
 

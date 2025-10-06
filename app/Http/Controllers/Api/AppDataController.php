@@ -22,6 +22,7 @@ class AppDataController extends Controller
         try {
             // Get all active venues with relationships
             $venues = Venue::with([
+                'venueType',
                 'drinkTypes',
                 'musicGenres', 
                 'location',

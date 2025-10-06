@@ -15,7 +15,7 @@ class VenueController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = Venue::with(['location', 'drinkTypes', 'musicGenres', 'reviews'])
+        $query = Venue::with(['location', 'venueType', 'drinkTypes', 'musicGenres', 'reviews'])
                     ->active()
                     ->when($request->filled('search'), function ($query) use ($request) {
                         $search = $request->input('search');
@@ -142,7 +142,7 @@ class VenueController extends Controller
         
         $venues = Venue::where('status', 'featured')
                      ->where('is_active', true)
-                     ->with(['location', 'drinkTypes', 'musicGenres'])
+                     ->with(['location', 'venueType', 'drinkTypes', 'musicGenres'])
                      ->orderBy('created_at', 'desc')
                      ->limit($limit)
                      ->get();
@@ -167,7 +167,7 @@ class VenueController extends Controller
         $lat = $request->input('latitude');
         $lon = $request->input('longitude');
 
-        $venues = Venue::with(['location', 'drinkTypes', 'musicGenres'])
+        $venues = Venue::with(['location', 'venueType', 'drinkTypes', 'musicGenres'])
                      ->active()
                      ->havingRaw('(
                          6371 * acos(
@@ -233,7 +233,7 @@ class VenueController extends Controller
     {
         $perPage = $request->input('per_page', 20);
         
-        $venues = Venue::with(['location', 'drinkTypes', 'musicGenres'])
+        $venues = Venue::with(['location', 'venueType', 'drinkTypes', 'musicGenres'])
                      ->active()
                      ->whereHas('drinkTypes', function ($query) use ($drinkType) {
                          $query->where('name', 'like', "%{$drinkType}%");
@@ -260,7 +260,7 @@ class VenueController extends Controller
     {
         $limit = $request->input('limit', 10);
         
-        $venues = Venue::with(['drinkTypes', 'musicGenres', 'location', 'reviews' => function($query) {
+        $venues = Venue::with(['drinkTypes', 'musicGenres', 'location', 'venueType', 'reviews' => function($query) {
                 $query->where('is_approved', true);
             }])
             ->where('is_active', true)
@@ -287,7 +287,7 @@ class VenueController extends Controller
     {
         $limit = $request->input('limit', 10);
         
-        $venues = Venue::with(['drinkTypes', 'musicGenres', 'location', 'reviews' => function($query) {
+        $venues = Venue::with(['drinkTypes', 'musicGenres', 'location', 'venueType', 'reviews' => function($query) {
                 $query->where('is_approved', true);
             }])
             ->where('is_active', true)
