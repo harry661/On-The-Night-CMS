@@ -223,7 +223,7 @@ class VenueResource extends Resource
                             ->directory('venues')
                             ->visibility('public')
                             ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                            ->maxSize(10240) // 10MB
+                            ->maxSize(20480) // 20MB
                             ->columnSpanFull()
                             ->helperText('Upload the main photo that represents your venue'),
                     ])
