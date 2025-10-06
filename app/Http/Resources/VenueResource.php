@@ -77,9 +77,9 @@ class VenueResource extends JsonResource
         // Get main venue images
         foreach ($this->getMedia('venue_images') as $media) {
             $urls[] = [
-                'url' => $media->getUrl(),
-                'thumbnail' => $media->getUrl('thumb'),
-                'preview' => $media->getUrl('preview'),
+                'url' => $this->getMediaUrl($media),
+                'thumbnail' => $this->getMediaUrl($media, 'thumb'),
+                'preview' => $this->getMediaUrl($media, 'preview'),
                 'collection' => 'venue_images',
             ];
         }
@@ -87,9 +87,9 @@ class VenueResource extends JsonResource
         // Get gallery images
         foreach ($this->getMedia('venue_gallery') as $media) {
             $urls[] = [
-                'url' => $media->getUrl(),
-                'thumbnail' => $media->getUrl('thumb'),
-                'preview' => $media->getUrl('preview'),
+                'url' => $this->getMediaUrl($media),
+                'thumbnail' => $this->getMediaUrl($media, 'thumb'),
+                'preview' => $this->getMediaUrl($media, 'preview'),
                 'collection' => 'venue_gallery',
             ];
         }
@@ -105,6 +105,24 @@ class VenueResource extends JsonResource
         }
         
         return $urls;
+    }
+
+    /**
+     * Get media URL using current request host
+     */
+    private function getMediaUrl($media, $conversion = null): string
+    {
+        $baseUrl = request()->getSchemeAndHttpHost();
+        
+        // Get the relative path from storage/app/public
+        $fullPath = $media->getPath();
+        $relativePath = str_replace(storage_path('app/public/'), '', $fullPath);
+        
+        if ($conversion) {
+            $relativePath = str_replace($media->file_name, $conversion . '_' . $media->file_name, $relativePath);
+        }
+        
+        return $baseUrl . '/storage/' . $relativePath;
     }
 
     /**

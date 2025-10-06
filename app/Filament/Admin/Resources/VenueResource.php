@@ -217,10 +217,9 @@ class VenueResource extends Resource
                 Section::make('Venue Images')
                     ->description('High-quality photos that showcase your venue\'s vibe')
                     ->schema([
-                        FileUpload::make('images')
-                            ->label('Venue Photos')
+                        FileUpload::make('venue_images')
+                            ->label('Main Venue Image')
                             ->image()
-                            ->multiple()
                             ->directory('venues')
                             ->imageEditor()
                             ->imageEditorAspectRatios([
@@ -229,7 +228,21 @@ class VenueResource extends Resource
                                 '1:1',   // Square social media ready
                             ])
                             ->columnSpanFull()
-                            ->helperText('Upload photos that capture your venue\'s atmosphere, crowd, lighting, and unique features'),
+                            ->helperText('Upload the main photo that represents your venue'),
+                        
+                        FileUpload::make('venue_gallery')
+                            ->label('Gallery Images')
+                            ->image()
+                            ->multiple()
+                            ->directory('venues/gallery')
+                            ->imageEditor()
+                            ->imageEditorAspectRatios([
+                                '16:9',  // Wide shots of venue space
+                                '4:3',   // Standard venue views  
+                                '1:1',   // Square social media ready
+                            ])
+                            ->columnSpanFull()
+                            ->helperText('Upload additional photos that capture your venue\'s atmosphere, crowd, lighting, and unique features'),
                     ])
                     ->icon('heroicon-o-camera')
                     ->collapsed(true),
