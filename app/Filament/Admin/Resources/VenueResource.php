@@ -225,6 +225,8 @@ class VenueResource extends Resource
                             ->imageCropAspectRatio('16:9')
                             ->imageResizeTargetWidth('1920')
                             ->imageResizeTargetHeight('1080')
+                            ->disk('public')
+                            ->visibility('public')
                             ->columnSpanFull()
                             ->helperText('Upload the main photo that represents your venue'),
                     ])

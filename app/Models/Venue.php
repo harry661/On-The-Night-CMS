@@ -105,6 +105,28 @@ class Venue extends Model implements HasMedia
     }
 
     /**
+     * Get the URL for media files using current request host
+     */
+    public function getFirstMediaUrl(string $collectionName = 'default', string $conversionName = ''): string
+    {
+        $media = $this->getFirstMedia($collectionName);
+        
+        if (!$media) {
+            return '';
+        }
+
+        $baseUrl = request()->getSchemeAndHttpHost();
+        $path = $media->getPath();
+        $relativePath = str_replace(storage_path('app/public/'), '', $path);
+        
+        if ($conversionName) {
+            $relativePath = str_replace($media->file_name, $conversionName . '_' . $media->file_name, $relativePath);
+        }
+        
+        return $baseUrl . '/storage/' . $relativePath;
+    }
+
+    /**
      * Get the full address as a single string
      */
     public function getFullAddressAttribute(): string
