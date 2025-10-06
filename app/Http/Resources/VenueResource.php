@@ -40,6 +40,10 @@ class VenueResource extends JsonResource
                 'color' => $this->venueType?->color,
             ],
             'images' => $this->getAllMediaUrls(),
+            'image' => $this->getMainImageUrl(),
+            'photo' => $this->getMainImageUrl(),
+            'picture' => $this->getMainImageUrl(),
+            'image_url' => $this->getMainImageUrl(),
             'location' => new LocationResource($this->whenLoaded('location')),
             'drink_types' => DrinkTypeResource::collection($this->whenLoaded('drinkTypes')),
             'music_genres' => MusicGenreResource::collection($this->whenLoaded('musicGenres')),
@@ -65,6 +69,20 @@ class VenueResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
+    }
+
+    /**
+     * Get the main image URL (first image or placeholder)
+     */
+    private function getMainImageUrl(): string
+    {
+        $media = $this->getFirstMedia('venue_images');
+        
+        if ($media) {
+            return $this->getMediaUrl($media);
+        }
+        
+        return $this->getPlaceholderImage();
     }
 
     /**
@@ -125,7 +143,14 @@ class VenueResource extends JsonResource
      */
     private function getPlaceholderImage(): string
     {
-        return asset('images/venue-placeholder.jpg');
+        $baseUrl = request()->getSchemeAndHttpHost();
+        
+        // Force HTTPS for ngrok URLs
+        if (str_contains($baseUrl, 'ngrok')) {
+            $baseUrl = str_replace('http://', 'https://', $baseUrl);
+        }
+        
+        return $baseUrl . '/images/venue-placeholder.jpg';
     }
 
     /**
