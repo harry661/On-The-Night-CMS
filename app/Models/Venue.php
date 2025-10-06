@@ -86,9 +86,6 @@ class Venue extends Model implements HasMedia
         $this->addMediaCollection('venue_images')
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp'])
             ->singleFile();
-
-        $this->addMediaCollection('venue_gallery')
-            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp']);
     }
 
     /**

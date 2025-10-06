@@ -84,16 +84,6 @@ class VenueResource extends JsonResource
             ];
         }
         
-        // Get gallery images
-        foreach ($this->getMedia('venue_gallery') as $media) {
-            $urls[] = [
-                'url' => $this->getMediaUrl($media),
-                'thumbnail' => $this->getMediaUrl($media, 'thumb'),
-                'preview' => $this->getMediaUrl($media, 'preview'),
-                'collection' => 'venue_gallery',
-            ];
-        }
-        
         // If no images found, provide placeholder
         if (empty($urls)) {
             $urls[] = [
