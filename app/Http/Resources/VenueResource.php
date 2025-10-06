@@ -41,9 +41,6 @@ class VenueResource extends JsonResource
             ],
             'images' => $this->getAllMediaUrls(),
             'image' => $this->getMainImageUrl(),
-            'photo' => $this->getMainImageUrl(),
-            'picture' => $this->getMainImageUrl(),
-            'image_url' => $this->getMainImageUrl(),
             'location' => new LocationResource($this->whenLoaded('location')),
             'drink_types' => DrinkTypeResource::collection($this->whenLoaded('drinkTypes')),
             'music_genres' => MusicGenreResource::collection($this->whenLoaded('musicGenres')),
@@ -116,7 +113,7 @@ class VenueResource extends JsonResource
     }
 
     /**
-     * Get media URL using current request host
+     * Get media URL using CORS-enabled route
      */
     private function getMediaUrl($media, $conversion = null): string
     {
@@ -135,7 +132,8 @@ class VenueResource extends JsonResource
             $relativePath = str_replace($media->file_name, $conversion . '_' . $media->file_name, $relativePath);
         }
         
-        return $baseUrl . '/storage/' . $relativePath;
+        // Use CORS-enabled route for images
+        return $baseUrl . '/cors-image/' . $relativePath;
     }
 
     /**
