@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\LocationController;
 use App\Http\Controllers\Api\DrinkTypeController;
 use App\Http\Controllers\Api\MusicGenreController;
 use App\Http\Controllers\Api\AppDataController;
+use App\Http\Controllers\Api\TestController;
 use App\Http\Controllers\AuthController;
 
 /*
