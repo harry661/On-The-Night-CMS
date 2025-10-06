@@ -104,6 +104,11 @@ class VenueResource extends JsonResource
     {
         $baseUrl = request()->getSchemeAndHttpHost();
         
+        // Force HTTPS for ngrok URLs
+        if (str_contains($baseUrl, 'ngrok')) {
+            $baseUrl = str_replace('http://', 'https://', $baseUrl);
+        }
+        
         // Get the relative path from storage/app/public
         $fullPath = $media->getPath();
         $relativePath = str_replace(storage_path('app/public/'), '', $fullPath);
