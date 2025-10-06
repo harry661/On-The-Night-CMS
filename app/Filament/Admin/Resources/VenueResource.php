@@ -253,12 +253,24 @@ class VenueResource extends Resource
                     ->searchable()
                     ->sortable(),
                 
-                ImageColumn::make('image')
+                TextColumn::make('image')
                     ->label('Image')
-                    ->disk('public')
-                    ->size(60)
-                    ->square()
-                    ->defaultImageUrl('/images/venue-placeholder.jpg'),
+                    ->formatStateUsing(function ($state, $record) {
+                        if ($state) {
+                            $imageUrl = url('/cors-image/' . $state);
+                            return view('filament.components.image-thumbnail', [
+                                'src' => $imageUrl,
+                                'alt' => $record->name,
+                                'size' => 60
+                            ]);
+                        }
+                        return view('filament.components.image-thumbnail', [
+                            'src' => '/images/venue-placeholder.jpg',
+                            'alt' => 'No image',
+                            'size' => 60
+                        ]);
+                    })
+                    ->html(),
                 
                 TextColumn::make('venueType.name')
                     ->label('Type')
