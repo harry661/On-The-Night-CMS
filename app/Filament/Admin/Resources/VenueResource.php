@@ -258,9 +258,7 @@ class VenueResource extends Resource
                     ->disk('public')
                     ->size(60)
                     ->square()
-                    ->defaultImageUrl('/images/venue-placeholder.jpg')
-                    ->openable()
-                    ->downloadable(),
+                    ->defaultImageUrl('/images/venue-placeholder.jpg'),
                 
                 TextColumn::make('venueType.name')
                     ->label('Type')
