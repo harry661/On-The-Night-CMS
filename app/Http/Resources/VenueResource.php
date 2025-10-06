@@ -39,8 +39,8 @@ class VenueResource extends JsonResource
                 'icon' => $this->venueType?->icon,
                 'color' => $this->venueType?->color,
             ],
-            'images' => $this->getAllMediaUrls(),
-            'image' => $this->getMainImageUrl(),
+            'images' => $this->getImageUrls(),
+            'image' => $this->getImageUrl(),
             'location' => new LocationResource($this->whenLoaded('location')),
             'drink_types' => DrinkTypeResource::collection($this->whenLoaded('drinkTypes')),
             'music_genres' => MusicGenreResource::collection($this->whenLoaded('musicGenres')),
@@ -69,71 +69,39 @@ class VenueResource extends JsonResource
     }
 
     /**
-     * Get the main image URL (first image or placeholder)
+     * Get the venue image URL
      */
-    private function getMainImageUrl(): string
+    private function getImageUrl(): string
     {
-        $media = $this->getFirstMedia('venue_images');
-        
-        if ($media) {
-            return $this->getMediaUrl($media);
+        if ($this->image) {
+            $baseUrl = request()->getSchemeAndHttpHost();
+            
+            // Force HTTPS for ngrok URLs
+            if (str_contains($baseUrl, 'ngrok')) {
+                $baseUrl = str_replace('http://', 'https://', $baseUrl);
+            }
+            
+            return $baseUrl . '/cors-image/' . $this->image;
         }
         
         return $this->getPlaceholderImage();
     }
 
     /**
-     * Get all media URLs for this venue with placeholder fallback
+     * Get image URLs array (for compatibility)
      */
-    private function getAllMediaUrls(): array
+    private function getImageUrls(): array
     {
-        $urls = [];
+        $imageUrl = $this->getImageUrl();
         
-        // Get main venue images
-        foreach ($this->getMedia('venue_images') as $media) {
-            $urls[] = [
-                'url' => $this->getMediaUrl($media),
-                'thumbnail' => $this->getMediaUrl($media, 'thumb'),
-                'preview' => $this->getMediaUrl($media, 'preview'),
-                'collection' => 'venue_images',
-            ];
-        }
-        
-        // If no images found, provide placeholder
-        if (empty($urls)) {
-            $urls[] = [
-                'url' => $this->getPlaceholderImage(),
-                'thumbnail' => $this->getPlaceholderImage(),
-                'preview' => $this->getPlaceholderImage(),
-                'collection' => 'placeholder',
-            ];
-        }
-        
-        return $urls;
-    }
-
-    /**
-     * Get media URL using CORS-enabled route
-     */
-    private function getMediaUrl($media, $conversion = null): string
-    {
-        $baseUrl = request()->getSchemeAndHttpHost();
-        
-        // Force HTTPS for ngrok URLs
-        if (str_contains($baseUrl, 'ngrok')) {
-            $baseUrl = str_replace('http://', 'https://', $baseUrl);
-        }
-        
-        // Get the relative path from storage/app/public
-        $fullPath = $media->getPath();
-        $relativePath = str_replace(storage_path('app/public/'), '', $fullPath);
-        
-        if ($conversion) {
-            $relativePath = str_replace($media->file_name, $conversion . '_' . $media->file_name, $relativePath);
-        }
-        
-        // Use CORS-enabled route for images
-        return $baseUrl . '/cors-image/' . $relativePath;
+        return [
+            [
+                'url' => $imageUrl,
+                'thumbnail' => $imageUrl,
+                'preview' => $imageUrl,
+                'collection' => 'venue_image',
+            ]
+        ];
     }
 
     /**

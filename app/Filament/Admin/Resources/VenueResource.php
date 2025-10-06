@@ -18,7 +18,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\KeyValue;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\CheckboxList;
@@ -216,9 +216,8 @@ class VenueResource extends Resource
                 Section::make('Venue Images')
                     ->description('High-quality photo that showcases your venue\'s vibe')
                     ->schema([
-                        SpatieMediaLibraryFileUpload::make('venue_images')
+                        FileUpload::make('image')
                             ->label('Venue Image')
-                            ->collection('venue_images')
                             ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                             ->maxSize(20480) // 20MB
                             ->imageEditor(false)
@@ -226,6 +225,7 @@ class VenueResource extends Resource
                             ->imageResizeTargetWidth('1920')
                             ->imageResizeTargetHeight('1080')
                             ->disk('public')
+                            ->directory('venues')
                             ->visibility('public')
                             ->columnSpanFull()
                             ->helperText('Upload the main photo that represents your venue'),

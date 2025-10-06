@@ -26,6 +26,7 @@ class Venue extends Model implements HasMedia
             'phone',
             'email',
             'website',
+            'image',
             'latitude',
             'longitude',
             'opening_hours',
